@@ -10,26 +10,22 @@ async fn main() -> Result<()> {
 
     // hc.do_get("/src/main.rs").await?.print().await?;
 
-    hc.do_post(
+    let req_login = hc.do_post(
         "/api/login",
         json!({
             "username": "test",
             "password": "welcome"
         }),
-    )
-    .await?
-    .print()
-    .await?;
+    );
+    req_login.await?.print().await?;
 
-    hc.do_post(
+    let req_create_ticket = hc.do_post(
         "/api/tickets",
         json!({
             "title": "ticketAAA"
         }),
-    )
-    .await?
-    .print()
-    .await?;
+    );
+    req_create_ticket.await?.print().await?;
 
     hc.do_delete("/api/tickets/0").await?.print().await?;
 

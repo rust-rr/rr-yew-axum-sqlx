@@ -2,6 +2,7 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
+use colored::Colorize;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -9,11 +10,12 @@ pub type Result<T> = core::result::Result<T, Error>;
 pub enum Error {
     LoginFailed,
     TicketDeleteFailedIdNotFound { id: u64 },
+    AuthFailedNoAuthTokenCookie,
 }
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        println!("->> {:<12} - {self:?}", "INTO_RES");
+        println!("->> {:<12} - {self:?}", "INTO_RES".bold().red());
 
         (StatusCode::INTERNAL_SERVER_ERROR, "UNHANDLED_CLIENT_ERROR").into_response()
     }

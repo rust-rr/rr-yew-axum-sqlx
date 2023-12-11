@@ -3,6 +3,7 @@ use crate::{
     web::AUTH_TOKEN,
 };
 use axum::{routing::post, Json, Router};
+use colored::Colorize;
 use serde::Deserialize;
 use serde_json::{json, Value};
 use tower_cookies::{Cookie, Cookies};
@@ -11,7 +12,7 @@ pub fn routes() -> Router {
     Router::new().route("/api/login", post(api_login))
 }
 async fn api_login(cookies: Cookies, payload: Json<LoginPayload>) -> Result<Json<Value>> {
-    println!("->> {:<12} - api_login", "HANDLER");
+    println!("->> {:<12} - api_login", "HANDLER".bold().blue());
 
     // TODO: check username and password against database
     if payload.username != "test" || payload.password != "welcome" {
