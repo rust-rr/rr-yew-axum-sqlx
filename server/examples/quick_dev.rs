@@ -21,5 +21,19 @@ async fn main() -> Result<()> {
     .print()
     .await?;
 
+    hc.do_post(
+        "/api/tickets",
+        json!({
+            "title": "ticketAAA"
+        }),
+    )
+    .await?
+    .print()
+    .await?;
+
+    hc.do_delete("/api/tickets/0").await?.print().await?;
+
+    hc.do_get("/api/tickets").await?.print().await?;
+
     Ok(())
 }

@@ -1,3 +1,6 @@
+use self::error::Result;
+use self::model::ModelController;
+use self::web::{routes_login, routes_tickets};
 use axum::{
     extract::{Path, Query},
     middleware,
@@ -10,17 +13,20 @@ use std::net::SocketAddr;
 use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
 
-use web::routes_login;
-
 mod error;
+mod model;
 mod web;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
+    // Initialize ModelController
+    let mc = ModelController::new().await?;
+
     let routes = Router::new()
         .merge(routes_home())
         .merge(routes_hello())
         .merge(routes_login::routes())
+        .nest("/api", routes_tickets::routes(mc.clone()))
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
@@ -31,6 +37,8 @@ async fn main() {
     // cargo watch -q -c -w src/ -x run
     println!("Listening on http://{addr}\n");
     axum::serve(listener, routes).await.unwrap();
+
+    Ok(())
 }
 
 async fn main_response_mapper(res: Response) -> Response {

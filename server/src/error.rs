@@ -3,12 +3,13 @@ use axum::{
     response::{IntoResponse, Response},
 };
 
+pub type Result<T> = core::result::Result<T, Error>;
+
 #[derive(Debug)]
 pub enum Error {
     LoginFailed,
+    TicketDeleteFailedIdNotFound { id: u64 },
 }
-
-pub type Result<T> = core::result::Result<T, Error>;
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
