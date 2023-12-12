@@ -11,6 +11,7 @@ pub enum Error {
     LoginFailed,
     TicketDeleteFailedIdNotFound { id: u64 },
     AuthFailedNoAuthTokenCookie,
+    AuthFailedTokenWrongFormat,
 }
 
 impl IntoResponse for Error {
