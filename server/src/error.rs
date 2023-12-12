@@ -6,12 +6,13 @@ use colored::Colorize;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Error {
     LoginFailed,
     TicketDeleteFailedIdNotFound { id: u64 },
     AuthFailedNoAuthTokenCookie,
     AuthFailedTokenWrongFormat,
+    AuthFailedCtxNotInRequestExt,
 }
 
 impl IntoResponse for Error {

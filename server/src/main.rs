@@ -32,6 +32,10 @@ async fn main() -> Result<()> {
         .merge(routes_login::routes())
         .nest("/api", routes_api)
         .layer(middleware::map_response(main_response_mapper))
+        .layer(middleware::from_fn_with_state(
+            mc.clone(),
+            mw_auth::mw_ctx_resolver,
+        ))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
 
@@ -50,6 +54,7 @@ async fn main_response_mapper(res: Response) -> Response {
         "->> {:<12} - main_response_mapper",
         "RES_MAPPER".bold().yellow()
     );
+    println!();
     res
 }
 
