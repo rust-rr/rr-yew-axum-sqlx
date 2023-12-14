@@ -6,3 +6,19 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# yew
+yew = { version = "0.21.0", features = ["csr"] }
+yew-router = "0.18.0"
+yewdux = "0.9"
+# serde
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# wasm-bindgen
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+# others
+gloo="0.11.0"
+reqwasm = "0.5.0"
+chrono = { version = "0.4", features = ["serde"] }
+validator = { version = "0.16", features = ["derive"] }
+web-sys = { version = "0.3", features = ["HtmlInputElement", "Window"]}

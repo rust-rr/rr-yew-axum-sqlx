@@ -1,3 +1,30 @@
+use yew::prelude::*;
+
+#[function_component]
+fn App() -> Html {
+    let counter = use_state(|| 0);
+    let onclick = {
+        let counter = counter.clone();
+        move |_| {
+            let value = *counter + 1;
+            counter.set(value);
+        }
+    };
+
+    html! {
+        <div class="text-center">
+            <h1 class="my-4 text-4xl font-bold">{"Hello World"}</h1>
+            <button
+                class="px-4 py-2 rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:ring"
+                {onclick}
+            >
+                {"Click to +1"}
+            </button>
+            <p class="my-4 text-2xl font-semibold text-purple-500">{*counter}</p>
+        </div>
+    }
+}
+
 fn main() {
-    println!("Hello, world!");
+    yew::Renderer::<App>::new().render();
 }
