@@ -50,7 +50,6 @@ async fn main() -> Result<()> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
 
-    // cargo watch -q -c -w src/ -x run
     println!("Listening on http://{addr}\n");
     axum::serve(listener, routes).await.unwrap();
 
