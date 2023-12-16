@@ -46,15 +46,11 @@ impl Error {
     pub fn client_status_and_error(&self) -> (StatusCode, ClientError) {
         #[allow(unreachable_patterns)]
         match self {
-            Self::LoginFailed => {
-                (StatusCode::FORBIDDEN, ClientError::LOGIN_FAIL)
-            }
+            Self::LoginFailed => (StatusCode::FORBIDDEN, ClientError::LOGIN_FAIL),
 
             Self::AuthFailedCtxNotInRequestExt
             | Self::AuthFailedNoAuthTokenCookie
-            | Self::AuthFailedTokenWrongFormat => {
-                (StatusCode::FORBIDDEN, ClientError::NO_AUTH)
-            }
+            | Self::AuthFailedTokenWrongFormat => (StatusCode::FORBIDDEN, ClientError::NO_AUTH),
 
             Self::TicketDeleteFailedIdNotFound { .. } => {
                 (StatusCode::BAD_REQUEST, ClientError::INVALID_PARAMS)

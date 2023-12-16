@@ -12,10 +12,7 @@ use tracing::debug;
 pub fn routes() -> Router {
     Router::new().route("/api/login", post(api_login))
 }
-async fn api_login(
-    cookies: Cookies,
-    payload: Json<LoginPayload>,
-) -> Result<Json<Value>> {
+async fn api_login(cookies: Cookies, payload: Json<LoginPayload>) -> Result<Json<Value>> {
     debug!("{:<12} - api_login", "HANDLER".bold().blue());
 
     // TODO: check username and password against database

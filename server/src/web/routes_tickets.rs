@@ -30,10 +30,7 @@ async fn create_ticket(
     Ok(Json(ticket))
 }
 
-async fn list_tickets(
-    State(mc): State<ModelController>,
-    ctx: Ctx,
-) -> Result<Json<Vec<Ticket>>> {
+async fn list_tickets(State(mc): State<ModelController>, ctx: Ctx) -> Result<Json<Vec<Ticket>>> {
     debug!("{:<12} - list_tickets", "HANDLER".bold().blue());
 
     let tickets = mc.list_tickets(ctx).await?;
