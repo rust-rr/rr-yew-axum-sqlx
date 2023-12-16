@@ -4,11 +4,12 @@ use axum::{
 };
 use colored::Colorize;
 use serde::Serialize;
+use tracing::debug;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Debug, Clone, Serialize, strum_macros::AsRefStr)]
-#[serde(tag="type", content="data")]
+#[serde(tag = "type", content = "data")]
 pub enum Error {
     LoginFailed,
     TicketDeleteFailedIdNotFound { id: u64 },
@@ -28,7 +29,7 @@ pub enum ClientError {
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        println!("->> {:<12} - {self:?}", "INTO_RES".bold().red());
+        debug!("{:<12} - {self:?}", "INTO_RES".bold().red());
 
         // Create a placeholder Axum response.
         let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();

@@ -9,6 +9,7 @@ use axum::{
     Json, Router,
 };
 use colored::Colorize;
+use tracing::debug;
 
 pub fn routes(mc: ModelController) -> Router {
     Router::new()
@@ -22,7 +23,7 @@ async fn create_ticket(
     ctx: Ctx,
     Json(ticket_fc): Json<TicketForCreate>,
 ) -> Result<Json<Ticket>> {
-    println!("->> {:<12} - create_ticket", "HANDLER".bold().blue());
+    debug!("{:<12} - create_ticket", "HANDLER".bold().blue());
 
     let ticket = mc.create_ticket(ctx, ticket_fc).await?;
 
@@ -30,7 +31,7 @@ async fn create_ticket(
 }
 
 async fn list_tickets(State(mc): State<ModelController>, ctx: Ctx) -> Result<Json<Vec<Ticket>>> {
-    println!("->> {:<12} - list_tickets", "HANDLER".bold().blue());
+    debug!("{:<12} - list_tickets", "HANDLER".bold().blue());
 
     let tickets = mc.list_tickets(ctx).await?;
 
@@ -42,7 +43,7 @@ async fn delete_ticket(
     ctx: Ctx,
     Path(id): Path<u64>,
 ) -> Result<Json<Ticket>> {
-    println!("->> {:<12} - delete_ticket", "HANDLER".bold().blue());
+    debug!("{:<12} - delete_ticket", "HANDLER".bold().blue());
 
     let ticket = mc.delete_ticket(ctx, id).await?;
 

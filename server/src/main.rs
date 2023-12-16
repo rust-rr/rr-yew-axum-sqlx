@@ -19,6 +19,8 @@ use serde_json::json;
 use std::net::SocketAddr;
 use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
+use tracing::{debug, info};
+use tracing_subscriber::EnvFilter;
 use uuid::Uuid;
 
 mod ctx;
@@ -29,6 +31,12 @@ mod web;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    tracing_subscriber::fmt()
+        .without_time()
+        .with_target(false)
+        .with_env_filter(EnvFilter::from_default_env())
+        .init();
+
     // Initialize ModelController
     let mc = ModelController::new().await?;
     let routes_api = routes_tickets::routes(mc.clone())
@@ -50,7 +58,7 @@ async fn main() -> Result<()> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
 
-    println!("Listening on http://{addr}\n");
+    info!("Listening on http://{addr}\n");
     axum::serve(listener, routes).await.unwrap();
 
     Ok(())
@@ -62,8 +70,8 @@ async fn main_response_mapper(
     req_method: Method,
     res: Response,
 ) -> Response {
-    println!(
-        "->> {:<12} - main_response_mapper",
+    debug!(
+        "{:<12} - main_response_mapper",
         "RES_MAPPER".bold().yellow()
     );
 
@@ -82,7 +90,7 @@ async fn main_response_mapper(
                 }
             });
 
-            println!("  ->> client_error_body: {}", client_error_body);
+            debug!("client_error_body: {}", client_error_body);
 
             (*status_code, Json(client_error_body)).into_response()
         });
@@ -93,7 +101,7 @@ async fn main_response_mapper(
     // TODO: Need to hander if log_request fail (but should not fail request)
     let _ = log_request(uuid, req_method, uri, ctx, service_error, client_error).await;
 
-    println!();
+    debug!("============\n");
     error_response.unwrap_or(res)
 }
 
@@ -123,18 +131,14 @@ struct Hello {
 // e.g. http://localhost:3000/hello?name=foo
 async fn handler_hello(Query(param): Query<Hello>) -> impl IntoResponse {
     let name = param.name.as_deref().unwrap_or("handler_hello");
-    println!(
-        "->> {:<12} - handler_hello - {}",
-        "HANDLER".bold().blue(),
-        name
-    );
+    debug!("{:<12} - handler_hello - {}", "HANDLER".bold().blue(), name);
     Html(format!("<strong>{}</strong>", name))
 }
 
 // e.g. http://localhost:3000/hello2/foo
 async fn handler_hello2(Path(name): Path<String>) -> impl IntoResponse {
-    println!(
-        "->> {:<12} - handler_hello2 - {}",
+    debug!(
+        "{:<12} - handler_hello2 - {}",
         "HANDLER".bold().blue(),
         name
     );

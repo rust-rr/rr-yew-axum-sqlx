@@ -8,6 +8,7 @@ use serde::Serialize;
 use serde_json::{json, Value};
 use serde_with::skip_serializing_none;
 use std::time::{SystemTime, UNIX_EPOCH};
+use tracing::debug;
 use uuid::Uuid;
 
 pub async fn log_request(
@@ -43,7 +44,7 @@ pub async fn log_request(
         error_data,
     };
 
-    println!("->> {}: \n{}", "LOG_REQUEST".bold().cyan(), json!(log_line));
+    debug!("{}:\n{}", "LOG_REQUEST".bold().cyan(), json!(log_line));
 
     // TODO: Send to cloud-watch.
 
