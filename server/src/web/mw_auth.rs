@@ -17,7 +17,11 @@ use lazy_regex::regex_captures;
 use tower_cookies::{Cookie, Cookies};
 use tracing::debug;
 
-pub async fn mw_require_auth(ctx: Result<Ctx>, req: Request<Body>, next: Next) -> Result<Response> {
+pub async fn mw_require_auth(
+    ctx: Result<Ctx>,
+    req: Request<Body>,
+    next: Next,
+) -> Result<Response> {
     debug!(
         "{:<12} - mw_require_auth - {ctx:?}",
         "MIDDLEWARE".bold().green()
@@ -46,7 +50,9 @@ pub async fn mw_ctx_resolver(
     };
 
     // Remove the cookie if something went wrong other than NoAuthTokenCookie.
-    if result_ctx.is_err() && !matches!(result_ctx, Err(Error::AuthFailedNoAuthTokenCookie)) {
+    if result_ctx.is_err()
+        && !matches!(result_ctx, Err(Error::AuthFailedNoAuthTokenCookie))
+    {
         cookies.remove(Cookie::from(AUTH_TOKEN))
     }
 
@@ -77,8 +83,9 @@ where
 /// Parse a token of format `user-[user-id].[expiration]-[signature]`
 /// Return (user-id, expiration, signature)
 fn parse_token(token: String) -> Result<(u64, String, String)> {
-    let (_whole, user_id, exp, sign) = regex_captures!(r#"^user-(\d+)\.(.+)\.(.+)"#, &token)
-        .ok_or(Error::AuthFailedTokenWrongFormat)?;
+    let (_whole, user_id, exp, sign) =
+        regex_captures!(r#"^user-(\d+)\.(.+)\.(.+)"#, &token)
+            .ok_or(Error::AuthFailedTokenWrongFormat)?;
 
     let user_id = user_id
         .parse()

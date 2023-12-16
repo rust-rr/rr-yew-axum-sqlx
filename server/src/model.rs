@@ -10,7 +10,7 @@ use std::sync::{Arc, Mutex};
 #[derive(Serialize, Debug, Clone)]
 pub struct Ticket {
     pub id: u64,
-    pub cid: u64, // creator user_id
+    pub cid: u64,
     pub title: String,
 }
 
@@ -31,7 +31,11 @@ impl ModelController {
         })
     }
 
-    pub async fn create_ticket(&self, ctx: Ctx, ticket_fc: TicketForCreate) -> Result<Ticket> {
+    pub async fn create_ticket(
+        &self,
+        ctx: Ctx,
+        ticket_fc: TicketForCreate,
+    ) -> Result<Ticket> {
         let mut store: std::sync::MutexGuard<'_, Vec<Option<Ticket>>> =
             self.tickets_store.lock().unwrap();
         let id = store.len() as u64;
