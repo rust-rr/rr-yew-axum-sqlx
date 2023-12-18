@@ -19,15 +19,6 @@ pub enum Error {
     ConfigMissingEnv(&'static str),
 }
 
-#[derive(Debug, strum_macros::AsRefStr)]
-#[allow(non_camel_case_types)]
-pub enum ClientError {
-    LOGIN_FAIL,
-    NO_AUTH,
-    INVALID_PARAMS,
-    SERVICE_ERROR,
-}
-
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
         debug!("{:<12} - {self:?}", "INTO_RES".bold().red());
@@ -62,4 +53,13 @@ impl Error {
             ),
         }
     }
+}
+
+#[derive(Debug, strum_macros::AsRefStr)]
+#[allow(non_camel_case_types)]
+pub enum ClientError {
+    LOGIN_FAIL,
+    NO_AUTH,
+    INVALID_PARAMS,
+    SERVICE_ERROR,
 }
