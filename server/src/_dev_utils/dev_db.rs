@@ -15,7 +15,7 @@ const SQL_DIR: &str = "sql/dev_initial";
 pub async fn init_dev_db() -> Result<(), Box<dyn std::error::Error>> {
     info!("{:<12} - init_dev_db()", "FOR-DEV-ONLY");
 
-    // reate the app_db/app_user with the postgres user.
+    // Create the app_db/app_user with the postgres user.
     {
         let root_db = new_db_pool(PG_DEV_POSTGRES_URL).await?;
         pexec(&root_db, SQL_RECREATE_DB).await?;
@@ -46,7 +46,7 @@ pub async fn init_dev_db() -> Result<(), Box<dyn std::error::Error>> {
 async fn pexec(db: &Db, file: &str) -> Result<(), sqlx::Error> {
     info!("{:<12} - pexec: {file}", "FOR-DEV-ONLY");
 
-    // -- Read the file.
+    // Read the file.
     let content = fs::read_to_string(file)?;
 
     // FIXME: Make the split more sql proof.
