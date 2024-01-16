@@ -1,5 +1,10 @@
 use yew::prelude::*;
 
+mod components;
+mod pages;
+mod router;
+mod store;
+
 #[function_component]
 fn App() -> Html {
     let counter = use_state(|| 0);
